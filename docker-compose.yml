@@ -2,19 +2,15 @@ version: '3'
 
 services:
   payload:
-    image: node:20-alpine
+    build: .
     ports:
       - '3000:3000'
-    volumes:
-      - .:/home/node/app
-      - node_modules:/home/node/app/node_modules
-    working_dir: /home/node/app/
-    command: sh -c "npm install && npm run dev"
     depends_on:
       - mongo
     env_file:
       - .env
     environment:
+      - PORT=3000
       - DATABASE_URI=mongodb://mongo/dron-inventory
 
   mongo:

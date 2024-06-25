@@ -3,11 +3,12 @@ FROM node:20.14-alpine as base
 FROM base as builder
 
 WORKDIR /home/node/app
+COPY tsconfig.json ./
 COPY package*.json ./
+COPY ./src ./src
 
-COPY . .
 RUN npm install
-RUN npm build
+RUN npm run build
 
 FROM base as runtime
 
@@ -21,6 +22,7 @@ RUN npm install --production
 COPY --from=builder /home/node/app/dist ./dist
 COPY --from=builder /home/node/app/build ./build
 
+USER node
 EXPOSE 3000
 
 CMD ["node", "dist/server.js"]
