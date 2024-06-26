@@ -1,11 +1,13 @@
 import express from 'express';
 import payload from 'payload';
-
+import helmet from 'helmet';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 const app = express();
+app.disable('x-powered-by');
+app.use(helmet());
 
 const port = process.env.PORT || 3000;
 
