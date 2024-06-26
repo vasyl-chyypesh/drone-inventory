@@ -4,7 +4,7 @@ This is a project for managing a drone inventory. It allows you to keep track of
 
 ## Run project locally
 
-1. Clone the repository: `git clone https://github.com/your-username/drone-inventory.git`
+1. Clone the repository: `git clone https://github.com/vasyl-chyypesh/dron-inventory.git`
 2. Change directory: `cd drone-inventory`
 3. Install dependencies: `npm install`
 4. Copy .env file and update values there: `cp .env.example .env` 
@@ -12,7 +12,7 @@ This is a project for managing a drone inventory. It allows you to keep track of
 6. Start the server: `npm start`
 
 ## Run project in docker
-1. Clone the repository: `git clone https://github.com/your-username/drone-inventory.git`
+1. Clone the repository: `git clone https://github.com/vasyl-chyypesh/dron-inventory.git`
 2. Change directory: `cd drone-inventory`
 3. Copy .env file and update values there: `cp .env.example .env` 
 4. Start `docker-compose up --build`

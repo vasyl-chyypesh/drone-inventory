@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "main": "dist/server.js",
   "license": "GPL-3.0",
+  "author": "Vasyl Chyypesh <vasyl.chyypesh@gmail.com>",
   "engines": {
     "node": ">=20.14.0"
   },
