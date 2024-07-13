@@ -13,7 +13,7 @@
     "scan:secrets": "ggshield secret scan path -y -r .",
     "scan:secrets:precommit": "ggshield secret scan pre-commit",
     "scan:security": "docker run --rm -v $(pwd):/tmp/scan bearer/bearer:latest scan /tmp/scan --severity critical,high,medium",
-    "prettier": "prettier --write 'src/**/*.ts'",
+    "prettier": "prettier --write 'src/**/*.ts' 'src/**/*.tsx'",
     "lint": "eslint src/",
     "dev": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts nodemon",
     "build:payload": "cross-env PAYLOAD_CONFIG_PATH=src/payload.config.ts payload build",

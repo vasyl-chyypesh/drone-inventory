@@ -2,6 +2,7 @@ import express from 'express';
 import payload from 'payload';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
+import path from 'path';
 
 dotenv.config();
 
@@ -16,6 +17,8 @@ app.get('/', (_, res) => {
   res.redirect('/admin');
 });
 
+app.use('/assets', express.static(path.resolve(__dirname, './assets')));
+
 const start = async () => {
   // Initialize Payload
   await payload.init({
@@ -28,7 +31,9 @@ const start = async () => {
 
   // Add your own express routes here
 
-  app.listen(port);
+  app.listen(port, () => {
+    payload.logger.info(`Server listening at port: ${port}`);
+  });
 };
 
 start();
