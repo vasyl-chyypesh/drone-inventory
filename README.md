@@ -2,21 +2,22 @@
 
 This is a project for managing a drone inventory. It allows you to keep track of your drones and their specifications.
 
-## Run project locally
+## Checkout project
 
-1. Clone the repository: `git clone https://github.com/vasyl-chyypesh/dron-inventory.git`
+1. Clone the repository: `git clone https://github.com/vasyl-chyypesh/drone-inventory.git`
 2. Change directory: `cd drone-inventory`
-3. Install dependencies: `npm install`
-4. Copy .env file and update values there: `cp .env.example .env` 
-5. Build project: `npm run build`
-6. Start the server: `npm start`
 
-## Run project in docker
-1. Clone the repository: `git clone https://github.com/vasyl-chyypesh/dron-inventory.git`
-2. Change directory: `cd drone-inventory`
-3. Copy .env file and update values there: `cp .env.example .env` 
-4. Start `docker-compose up --build`
+## Run the project locally using [Node.js](https://nodejs.org/en) and [MongoDB](https://www.mongodb.com/)
 
+1. Install dependencies: `npm install`
+2. Copy .env file and update values there: `cp .env.example .env`
+3. Build project: `npm run build`
+4. Start the server: `npm start`
+
+## Run project using [Docker](https://www.docker.com/)
+
+1. Copy .env file and update values there: `cp .env.example .env` 
+2. Start `docker-compose up --build`
 
 ## Usage
 

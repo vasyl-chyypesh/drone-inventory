@@ -1,6 +1,6 @@
 {
-  "name": "dron-inventory",
-  "description": "Dron inventory admin panel",
+  "name": "drone-inventory",
+  "description": "Drone inventory admin panel",
   "version": "1.0.0",
   "main": "dist/server.js",
   "license": "GPL-3.0",
