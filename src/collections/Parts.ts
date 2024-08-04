@@ -12,6 +12,7 @@ export enum PartType {
   AntennaVideo = 'Antenna Video',
   AntennaRadio = 'Antenna Radio',
   Battery = 'Battery',
+  Other = 'Other',
 }
 
 const Parts: CollectionConfig = {

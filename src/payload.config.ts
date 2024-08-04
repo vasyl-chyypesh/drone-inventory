@@ -9,6 +9,8 @@ import Drones from './collections/Drones';
 import Parts from './collections/Parts';
 import Customers from './collections/Customers';
 import Users from './collections/Users';
+import PartsOrders from './collections/PartsOrders';
+import MarketPlaces from './collections/MarketPlaces';
 
 import { Logo } from './components/graphics/Logo';
 import { Icon } from './components/graphics/Icon';
@@ -30,7 +32,7 @@ export default buildConfig({
     },
   },
   editor: slateEditor({}),
-  collections: [Drones, Parts, Customers, Users],
+  collections: [Drones, PartsOrders, Parts, MarketPlaces, Customers, Users],
   typescript: {
     outputFile: path.resolve(__dirname, 'payload-types.ts'),
   },
