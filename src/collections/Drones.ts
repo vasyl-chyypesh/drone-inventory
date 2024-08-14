@@ -3,25 +3,15 @@ import { adminOnly } from '../access/adminOnly';
 import { PartType } from './Parts';
 import { evaluatePrice } from './utils/evaluatePrice';
 import { MESSAGES, PRICE_INPUT_REGEX } from './utils/constants';
-
-const getFinalPriceForPart = (partType: PartType): FieldHook => {
-  return async function getFinalPrice({ data }) {
-    const priceText = data[`${partType}_price`];
-    if (!priceText) {
-      return '';
-    }
-    const finalPrice = evaluatePrice(priceText);
-    return finalPrice;
-  };
-};
+import { RowLabelArgs } from 'payload/dist/admin/components/forms/RowLabel/types';
 
 const getTotalPrice: FieldHook = async ({ data }) => {
-  return Object.values(PartType)
-    .map((partType) => {
-      const priceText = data[`${partType}_price`];
+  return data.parts
+    ?.map((part) => {
+      const priceText = part['price'];
       return priceText ? parseFloat(evaluatePrice(priceText)) : 0;
     })
-    .reduce((total, currentPrice) => total + currentPrice, 0);
+    ?.reduce((total, currentPrice) => total + currentPrice, 0);
 };
 
 const Drones: CollectionConfig = {
@@ -80,75 +70,67 @@ const Drones: CollectionConfig = {
         afterRead: [getTotalPrice],
       },
     },
-  ],
-};
-
-Object.values(PartType).forEach((partType) => {
-  Drones.fields.push(
     {
-      name: partType,
-      type: 'relationship',
-      relationTo: 'parts',
-      hasMany: false,
-      filterOptions: {
-        partType: { equals: partType },
+      name: 'parts',
+      type: 'array',
+      admin: {
+        components: {
+          RowLabel: ({ data, index }: RowLabelArgs) => {
+            return data?.partType || `Part ${String(index).padStart(2, '0')}`;
+          },
+        },
       },
-    },
-    {
-      type: 'row',
       fields: [
         {
-          name: `${partType}_price`,
-          type: 'text',
-          label: 'Price',
-          admin: {
-            width: '20%',
-          },
-          validate: (value) => {
-            if (!value) {
-              return true;
-            }
-            const isValid = PRICE_INPUT_REGEX.test(value);
-            if (!isValid) {
-              return MESSAGES.INVALID_PRICE_INPUT;
-            }
-            return true;
-          },
+          name: 'partType',
+          type: 'select',
+          required: true,
+          options: Object.values(PartType),
         },
         {
-          name: `${partType}_finalPrice`,
-          type: 'text',
-          label: 'Final Price',
-          access: {
-            create: () => false,
-            update: () => false,
-          },
-          admin: {
-            description: 'UAH',
-            readOnly: true,
-            width: '10%',
-          },
-          hooks: {
-            beforeChange: [
-              ({ siblingData }) => {
-                // Mutate the sibling data to prevent DB storage
-                siblingData[`${partType}_finalPrice`] = undefined;
+          name: 'partName',
+          type: 'relationship',
+          relationTo: 'parts',
+          required: true,
+          hasMany: false,
+        },
+        {
+          type: 'row',
+          fields: [
+            {
+              name: 'price',
+              type: 'text',
+              label: 'Price',
+              admin: {
+                width: '30%',
               },
-            ],
-            afterRead: [getFinalPriceForPart(partType)],
-          },
-        },
-        {
-          name: `${partType}_link`,
-          type: 'text',
-          label: 'Link',
-          admin: {
-            width: '70%',
-          },
+              validate: (value) => {
+                if (!value) {
+                  return true;
+                }
+                const isValid = PRICE_INPUT_REGEX.test(value);
+                if (!isValid) {
+                  return MESSAGES.INVALID_PRICE_INPUT;
+                }
+                return true;
+              },
+            },
+            {
+              name: 'partsOrder',
+              type: 'relationship',
+              relationTo: 'parts_orders',
+              label: 'Order',
+              hasMany: false,
+              admin: {
+                width: '70%',
+                sortOptions: 'orderDate',
+              },
+            },
+          ],
         },
       ],
     },
-  );
-});
+  ],
+};
 
 export default Drones;

@@ -1,4 +1,5 @@
-import { CollectionConfig } from 'payload/types';
+import payload from 'payload';
+import { CollectionConfig, FieldHook } from 'payload/types';
 import { adminOnly } from '../access/adminOnly';
 import { PRICE_INPUT_REGEX, MESSAGES } from './utils/constants';
 import { evaluatePrice } from './utils/evaluatePrice';
@@ -8,6 +9,13 @@ export enum DeliveryStatus {
   Delivered = 'Delivered',
   Canceled = 'Canceled',
 }
+
+const formatOrderTitle: FieldHook = async ({ data }) => {
+  const marketPlace = await payload.findByID({ collection: 'market_places', id: data.marketPlace });
+  const marketPlaceName = marketPlace?.name as string;
+  const orderDate = (data.orderDate as string).split('T')[0];
+  return `${data.description} (${marketPlaceName}) ${orderDate}`;
+};
 
 function getFinalPrice({ data }): string {
   const priceText = data['price'];
@@ -28,11 +36,33 @@ const PartsOrders: CollectionConfig = {
     delete: () => false,
   },
   admin: {
+    useAsTitle: 'orderTitle',
     description: 'Parts orders',
-    defaultColumns: ['description', 'link', 'finalPrice', 'orderDate'],
+    defaultColumns: ['orderTitle', 'link', 'orderDate'],
   },
   timestamps: true,
   fields: [
+    {
+      name: 'orderTitle',
+      label: false,
+      type: 'text',
+      hooks: {
+        beforeChange: [
+          ({ siblingData }) => {
+            // Mutate the sibling data to prevent DB storage
+            siblingData.orderTitle = undefined;
+          },
+        ],
+        afterRead: [formatOrderTitle],
+      },
+      access: {
+        create: () => false,
+        update: () => false,
+      },
+      admin: {
+        hidden: true,
+      },
+    },
     {
       name: 'marketPlace',
       type: 'relationship',
