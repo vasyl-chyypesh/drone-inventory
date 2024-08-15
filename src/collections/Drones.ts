@@ -11,7 +11,8 @@ const getTotalPrice: FieldHook = async ({ data }) => {
       const priceText = part['price'];
       return priceText ? parseFloat(evaluatePrice(priceText)) : 0;
     })
-    ?.reduce((total, currentPrice) => total + currentPrice, 0);
+    ?.reduce((total: number, currentPrice: number) => total + currentPrice, 0)
+    .toFixed(2);
 };
 
 const Drones: CollectionConfig = {
@@ -93,6 +94,13 @@ const Drones: CollectionConfig = {
           relationTo: 'parts',
           required: true,
           hasMany: false,
+          filterOptions: ({ siblingData }) => {
+            if ((<any>siblingData).partType) {
+              return {
+                partType: { equals: (<any>siblingData).partType },
+              };
+            }
+          },
         },
         {
           type: 'row',
