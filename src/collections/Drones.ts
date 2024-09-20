@@ -1,4 +1,4 @@
-import { CollectionConfig, FieldHook } from 'payload/types';
+import { BeforeDuplicate, CollectionConfig, FieldHook } from 'payload/types';
 import { adminOnly } from '../access/adminOnly';
 import { PartType } from './Parts';
 import { evaluatePrice } from './utils/evaluatePrice';
@@ -15,6 +15,13 @@ const getTotalPrice: FieldHook = async ({ data }) => {
     .toFixed(2);
 };
 
+const beforeDuplicate: BeforeDuplicate = ({ data }) => {
+  return {
+    ...data,
+    name: `${data.name} Copy`,
+  };
+};
+
 const Drones: CollectionConfig = {
   slug: 'drones',
   access: {
@@ -27,6 +34,9 @@ const Drones: CollectionConfig = {
     useAsTitle: 'name',
     description: 'Drone instances',
     defaultColumns: ['name', 'description', 'customer'],
+    hooks: {
+      beforeDuplicate,
+    },
   },
   timestamps: true,
   fields: [
